@@ -1,20 +1,20 @@
 # HLT Trigger Info Analyzer
 ## Usage Instruction
 
-First you have to create a [VM](http://opendata.cern.ch/VM/CMS "CMS Open Data Portal") from the CMS Open Data website. 
+First you have to create a [VM](http://opendata.cern.ch/record/250 "CMS Open Data Portal") from the CMS Open Data website and open de slc5 CMS shell terminal available in the Desktop.
 
 Then follow these steps:
 
 - Create a CMSSW environment: 
 
     ```
-    cmsrel CMSSW_5_3_32
+    cmsrel CMSSW_4_2_8
     ```
 
-- Change to the CMSSW_5_3_32/src/ directory:
+- Change to the CMSSW_4_2_8/src/ directory:
 
     ```
-    cd CMSSW_5_3_32/src/
+    cd CMSSW_4_2_8/src/
     ```
 
 - Initialize the CMSSW environment:
@@ -22,14 +22,12 @@ Then follow these steps:
   ```
   cmsenv
   ```
-
 - Obtain the code from git and move it to the `src` area:
 
   ```
-  git clone git://github.com/asdru30/TriggerInfoTool.git
+  git clone -b 2010 git://github.com/asdru30/TriggerInfoTool.git
   cd TriggerInfoTool
   ```
-  
 
 - Go to the TriggerInfoTool/GeneralInfoAnalyzer area.  Note that the code lives under `src`
 
@@ -47,13 +45,15 @@ Then follow these steps:
 
 ```
 ln -s python/triggerinfoanalyzer_cfg.py .
+
 ```
 
 - Make symbolic links to the conditions database
 
 ```
-ln -sf /cvmfs/cms-opendata-conddb.cern.ch/FT_53_LV5_AN1_RUNA FT_53_LV5_AN1
-ln -sf /cvmfs/cms-opendata-conddb.cern.ch/FT_53_LV5_AN1_RUNA.db FT_53_LV5_AN1_RUNA.db
+ln -sf /cvmfs/cms-opendata-conddb.cern.ch/FT_R_42_V10A FT_R_42_V10A
+ln -sf /cvmfs/cms-opendata-conddb.cern.ch/FT_R_42_V10A.db FT_R_42_V10A.db
+
 ```
 
 - Make sure the `cms-opendata-conddb.cern.ch` directory has actually expanded in your VM.  One way of doing this is executing:
