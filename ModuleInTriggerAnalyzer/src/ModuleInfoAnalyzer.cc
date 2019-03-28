@@ -64,10 +64,7 @@ class ModuleInfoAnalyzer : public edm::EDAnalyzer {
      
       // from HLTEventAnalyzerAOD.h
       /// module config parameters
-	std::string   processName_;
       std::string   triggerName_;
-      edm::InputTag triggerResultsTag_;
-      edm::InputTag triggerEventTag_;
 
       // additional class data memebers
       // these are actually the containers where we will store
@@ -89,32 +86,11 @@ class ModuleInfoAnalyzer : public edm::EDAnalyzer {
 
 //
 // constructors and destructor
-// Notice that here, using the parameter set tool, 
-// you need to point the code to
-// the right branch (in the EDM root files) where the trigger information
-// is stored.  
-
-// Also, at configuration time
-// you will need to point to the appropiate triggers
-// you want to look at. Alternatively (is also shown below), you
-// could select the trigger names dynamically; for example getting them
-// from the HLTConfigProvider.
-
-// To start out, you need to define a processName, which is the name of
-// the CMSSW computing process that originally wrote the products in the root
-// file. Originally, this is always "HLT", by default.  
-// In triggerName, you can
-// use wildcards, which will be described later.
-// As for the InputTags, these shall match the name of the ROOT branches
-// where the information is stored.  This was essentially fixed and will
-// most likely be the same always. 
+// 
 
 //This should match your configuration python file
 ModuleInfoAnalyzer::ModuleInfoAnalyzer(const edm::ParameterSet& ps):
-processName_(ps.getParameter<std::string>("processName")),
-triggerName_(ps.getParameter<std::string>("triggerName")),
-triggerResultsTag_(ps.getParameter<edm::InputTag>("triggerResults")),
-triggerEventTag_(ps.getParameter<edm::InputTag>("triggerEvent"))
+triggerName_(ps.getParameter<std::string>("triggerName"))
 {
    //now do what ever initialization is needed
 
@@ -139,10 +115,12 @@ ModuleInfoAnalyzer::~ModuleInfoAnalyzer()
 void ModuleInfoAnalyzer::beginRun(edm::Run const& iRun, edm::EventSetup const& iSetup)
 //--------------------------------------------------------------------------
 {
-	using namespace std;
-	using namespace edm;
+ master
+  using namespace std;
+  using namespace edm;
+
 	bool changed(true);
-	hltConfig_.init(iRun,iSetup,processName_,changed);
+	hltConfig_.init(iRun,iSetup,"HLT",changed);
 
 }//------------------- beginRun()
 
@@ -163,7 +141,8 @@ void ModuleInfoAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
    // and assigned to triggerResultsTag_ and triggerEventTag_
  
    // After that, a simple sanity check is done.
- 
+   InputTag triggerEventTag_("hltTriggerSummaryAOD","","HLT");
+   InputTag triggerResultsTag_("TriggerResults","","HLT");
    iEvent.getByLabel(triggerResultsTag_,triggerResultsHandle_);
    iEvent.getByLabel(triggerEventTag_,triggerEventHandle_);
    
