@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: trigger-argo-
+spec:
+  entrypoint: trigger-argo
+  volumes:
+    - name: workdir
+      hostPath:
+        path: /mnt/data
+        type: DirectoryOrCreate
+  templates:
+  - name: trigger-argo
+    script:
+      image: cmsopendata/cmssw_5_3_32 
+      command: [sh]
+      source: |
+        sudo chown $USER /mnt/vol
+        source /opt/cms/entrypoint.sh
+        echo pwd `pwd`
+        git clone git://github.com/cms-legacydata-analyses/TriggerInfoTool.git
+        cd TriggerInfoTool
+        cd GeneralInfoAnalyzer
+        scram b
+        sed -i "s/process.GlobalTag.connect/\#process.GlobalTag.connect/g" python/triggerinfoanalyzer_cfg.py
+        cmsRun python/triggerinfoanalyzer_cfg.py > full.log
+        mv full.log /mnt/vol
+      volumeMounts:
+      - name: workdir
+        mountPath: /mnt/vol
