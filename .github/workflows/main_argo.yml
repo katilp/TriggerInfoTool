@@ -24,9 +24,11 @@ jobs:
         argo version
     - name: Submit the argo test workflow
       run: |
+        export PATH="`pwd`/bin:$PATH"
         argo submit -n argo  --wait argo-workflow.yaml
     - name: Check the output
       run: |
+        export PATH="`pwd`/bin:$PATH"
         argo logs -n argo @latest
         mkdir outputs
         echo Copy file with kubectl cp task-pv-pod:/mnt/data/ outputs/ :
