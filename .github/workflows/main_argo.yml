@@ -3,7 +3,7 @@ on:
   - pull_request
 jobs:
   job1:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest 
     name: argo workflow on minikube with output
     steps:
     - uses: actions/checkout@v2
